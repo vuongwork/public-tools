@@ -4,19 +4,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Public Tools</title>
+  <link rel="icon" href="./assets/brand/vuong-logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./assets/base.css">
 </head>
 <body>
   <main class="shell">
     <header class="hero">
-      <h1>Public Tools</h1>
-      <p>Công cụ dùng hằng ngày.</p>
+      <img class="logo" src="./assets/brand/vuong-logo.svg" alt="Logo Vuong" width="120" height="120">
+      <div>
+        <h1>Public Tools</h1>
+        <p>Công cụ dùng hằng ngày.</p>
+        <p class="by"><span>By</span> @vuongwork</p>
+      </div>
     </header>
-    <a class="card tool" href="./tools/expense-splitter/">
-      <img src="./tools/expense-splitter/assets/logo.svg" alt="" width="48" height="48" style="display:block;margin-bottom:.6rem">
-      <h2>Chia Tiền Nhóm</h2>
-      <p>Ghi lại các khoản chi chung và tính ai cần chuyển tiền cho ai.</p>
-    </a>
+    <section class="tools" aria-label="Danh sách công cụ">
+      <a class="card tool" href="./tools/expense-splitter/">
+        <img src="./tools/expense-splitter/assets/logo.svg" alt="" width="48" height="48">
+        <h2>Chia Tiền Nhóm</h2>
+        <p>Ghi lại các khoản chi chung và tính ai cần chuyển tiền cho ai.</p>
+      </a>
+    </section>
+    <p class="foot">Chạy ngay trên trình duyệt. Dữ liệu ở lại máy của bạn.</p>
   </main>
 </body>
 </html>
