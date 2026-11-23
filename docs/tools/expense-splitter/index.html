@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b6f73">
+  <title>Chia Tiền Nhóm · Public Tools</title>
+  <link rel="icon" href="./assets/logo.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/logo-256.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <header class="appbar">
+    <div class="appbar-inner">
+      <img class="appbar-logo" src="./assets/logo-coin.svg" alt="" width="44" height="44">
+      <div class="appbar-text">
+        <h1>Chia Tiền Nhóm</h1>
+        <p>Tick ai tham gia khoản nào. Bấm "+ tiền" ở ô của người đã trả để nhập số tiền.</p>
+      </div>
+      <a class="appbar-home" href="../../">Public Tools</a>
+    </div>
+  </header>
+
+  <main class="shell">
+    <noscript>Cần bật JavaScript để sử dụng công cụ.</noscript>
+    <p id="storage-status" class="notice" role="status"></p>
+
+    <section class="panel">
+      <div class="trip-bar">
+        <label class="trip-name">Tên buổi <input id="trip-name" maxlength="100" placeholder="Ví dụ: Đi biển cuối tuần"></label>
+        <button class="ghost" id="reset" type="button">Buổi mới</button>
+      </div>
+      <p id="undo-bar" class="undo" role="status"></p>
+      <div class="grid-wrap" id="grid-wrap" role="region" aria-label="Bảng người và khoản chi" tabindex="0">
+        <table id="grid"></table>
+      </div>
+      <p class="legend"><span class="pos">+ được nhận</span> <span class="neg">− phải trả</span> Khoản viền đỏ đang lỗi và chưa được tính.</p>
+      <p class="legend keys">Bàn phím: <span><kbd>Tab</kbd>/mũi tên đi giữa các ô</span> <span><kbd>Space</kbd> tick</span> <span><kbd>A</kbd> tick/bỏ cả cột</span> <span>gõ số hoặc <kbd>Enter</kbd> để nhập tiền</span> <span><kbd>Enter</kbd> ở tên → ô tiếp theo</span></p>
+
+      <div id="cell-popover" class="popover" role="dialog" aria-modal="false" aria-labelledby="pop-title" hidden>
+        <div class="pop-head"><strong id="pop-title"></strong><button type="button" class="icon" id="pop-close" aria-label="Đóng" tabindex="-1">✕</button></div>
+        <label>Đã trả <input id="pop-paid" inputmode="text" autocomplete="off" placeholder="0 · vd 500k, 2tr"></label>
+        <label>Phần riêng <input id="pop-extra" inputmode="text" autocomplete="off" placeholder="Món của riêng mình, tiền mời…"></label>
+        <fieldset>
+          <legend>Mời riêng cho</legend>
+          <div id="pop-treats" class="choices"></div>
+        </fieldset>
+        <p class="hint">Phần riêng trừ ra trước, còn lại mới chia đều cho người được tick. Có tick: góp thêm phần chia đều. Bỏ tick: chỉ chịu phần riêng.</p>
+        <p class="hint"><kbd>Enter</kbd> lưu và xuống người kế tiếp · <kbd>Shift</kbd>+<kbd>Enter</kbd> lên · <kbd>Esc</kbd> đóng</p>
+        <button type="button" class="primary" id="pop-done">Xong</button>
+      </div>
+    </section>
+
+    <section class="panel settle">
+      <div class="settle-head"><h2>Chuyển khoản</h2><strong id="total" class="total"></strong></div>
+      <p id="settlement-hint" class="muted"></p>
+      <ul id="transfers" class="transfers"></ul>
+      <div class="actions">
+        <button id="invoice" class="primary" type="button" disabled>Xuất hóa đơn (HTML)</button>
+        <button id="receipt" class="ghost" type="button" disabled>Xuất ảnh hóa đơn</button>
+        <button id="excel" class="ghost" type="button" disabled>Xuất Excel</button>
+        <button id="copy" class="ghost" type="button" disabled>Sao chép dạng chữ</button>
+      </div>
+      <p id="copy-status" role="status"></p>
+      <label id="copy-fallback" hidden>Kết quả để sao chép thủ công <textarea id="summary-text" rows="8" readonly></textarea></label>
+    </section>
+
+    <section class="panel pay-panel" aria-labelledby="pay-title">
+      <div class="settle-head"><h2 id="pay-title">Thông tin chuyển khoản</h2></div>
+      <p class="muted">Tài khoản nhận tiền và mã QR, in lên hóa đơn (QR nằm cuối ảnh hóa đơn). Vẫn giữ khi bấm "Buổi mới"; chỉ lưu trong trình duyệt này.</p>
+      <div class="pay-body">
+        <div class="pay-grid">
+          <label>Người nhận <select id="pay-recipient"><option value="">Không ghi</option></select></label>
+          <label>Ngân hàng <input id="pay-bank" maxlength="60" autocomplete="off" placeholder="Ví dụ: Vietcombank"></label>
+          <label>Số tài khoản <input id="pay-account" maxlength="40" autocomplete="off" inputmode="numeric" placeholder="0123 456 789"></label>
+          <label>Chủ tài khoản <input id="pay-owner" maxlength="80" autocomplete="off" placeholder="NGUYEN VAN A"></label>
+          <label class="wide">Nội dung chuyển khoản <input id="pay-memo" maxlength="120" autocomplete="off"></label>
+        </div>
+        <div class="qr-field">
+          <div class="qr-box"><img id="pay-qr-img" alt="Mã QR nhận tiền" hidden><span id="pay-qr-empty" class="muted">Chưa có mã QR</span></div>
+          <label class="button ghost">Tải ảnh QR lên<input type="file" id="pay-qr-file" accept="image/*" class="visually-hidden"></label>
+          <button id="pay-qr-clear" class="linkish" type="button" hidden>Xóa QR</button>
+          <p id="pay-status" class="hint" role="status">Lấy mã QR nhận tiền từ app ngân hàng (chụp màn hình rồi tải lên).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="evidence-panel-title">
+      <div class="settle-head"><h2 id="evidence-panel-title">Chứng từ thanh toán</h2><span id="evidence-count" class="muted"></span></div>
+      <p class="muted">Ảnh hóa đơn / biên lai / chuyển khoản của cả buổi. Mỗi ảnh có mã CT1, CT2… và được in kèm trên hóa đơn. Bấm vào ảnh để xem lớn, ✕ để xóa.</p>
+      <div id="evidence-panel" class="evidence-list"></div>
+      <div class="actions">
+        <label class="button primary">+ Tải ảnh lên<input type="file" id="evidence-file" accept="image/*" multiple class="visually-hidden"></label>
+      </div>
+      <p id="evidence-panel-status" class="hint" role="status"></p>
+    </section>
+  </main>
+
+  <dialog id="receipt-dialog" class="receipt-dialog" aria-labelledby="receipt-title">
+    <div class="pop-head"><strong id="receipt-title">Ảnh hóa đơn</strong><button type="button" class="icon" id="receipt-close" aria-label="Đóng">✕</button></div>
+    <label class="inline-check" id="receipt-evidence-row" hidden><input type="checkbox" id="receipt-evidence" checked> Kèm ảnh chứng từ</label>
+    <div class="receipt-preview"><img id="receipt-img" alt="Ảnh hóa đơn chia tiền"></div>
+    <div class="actions">
+      <button id="receipt-share" class="primary" type="button" hidden>Chia sẻ</button>
+      <button id="receipt-copy" class="primary" type="button">Sao chép ảnh</button>
+      <a id="receipt-download" class="button ghost" download>Tải ảnh</a>
+    </div>
+    <p id="receipt-status" class="muted" role="status"></p>
+  </dialog>
+</body>
+</html>
