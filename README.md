@@ -12,7 +12,7 @@ Bộ công cụ chạy trên trình duyệt, dùng HTML, CSS và JavaScript thu�
 
 |  | Tool                       | Mô tả ngắn                                                                                                            | Thư mục                                                       | Tài liệu                                     |
 | - | -------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------- | ---------------------------------------------- |
-|  | **Chia Tiền Nhóm** | Chia chi phí nhóm trên một bảng người × khoản chi; tính ai chuyển cho ai; xuất hóa đơn HTML, ảnh, Excel. | [`docs/tools/expense-splitter/`](docs/tools/expense-splitter/) | [README](docs/tools/expense-splitter/README.md) |
+| <img src="docs/tools/expense-splitter/assets/logo.svg" width="48" height="48" alt="Chia Tiền Nhóm"> | **Chia Tiền Nhóm** | Chia chi phí nhóm trên một bảng người × khoản chi; tính ai chuyển cho ai; xuất hóa đơn HTML, ảnh, Excel. | [`docs/tools/expense-splitter/`](docs/tools/expense-splitter/) | [README](docs/tools/expense-splitter/README.md) |
 
 ## Chạy và kiểm tra
 
